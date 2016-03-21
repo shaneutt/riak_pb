@@ -89,7 +89,7 @@
 -spec encode(atom() | tuple()) -> iolist().
 
 encode(Msg) ->    
-    encode(get(pb_use_native_encoding), Msg).
+    encode(true, Msg).
 
 encode(true, Msg) ->
     encode_raw(Msg);
@@ -134,12 +134,7 @@ de_stringify(Element) ->
 %% or straight term_to_binary encoding.
 -spec decode(integer(), binary()) -> atom() | tuple().
 decode(MsgCode, MsgData) ->
-    case get(pb_use_native_encoding) of
-        true ->
-            decode_raw(MsgCode, MsgData);
-        _ ->
-            decode_pb(MsgCode, MsgData)
-    end.
+    decode_raw(MsgCode, MsgData).
 
 decode_pb(MsgCode, <<>>) ->
     msg_type(MsgCode);
