@@ -32,6 +32,8 @@
 -compile(export_all).
 -endif.
 
+-compile(export_all).
+
 -export([encode/1,      %% riakc_pb:encode
 	 encode/2,      %% riakc_pb:encode
          decode/2,      %% riakc_pb:decode
