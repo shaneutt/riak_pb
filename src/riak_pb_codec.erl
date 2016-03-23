@@ -53,6 +53,8 @@
          decode_commit_hooks/1
         ]).
 
+-include_lib("profiler/include/profiler.hrl").
+
 %% @type modfun_property().
 %%
 %% Bucket properties that store module/function pairs, e.g.
@@ -134,12 +136,16 @@ de_stringify(Element) ->
 %% or straight term_to_binary encoding.
 -spec decode(integer(), binary()) -> atom() | tuple().
 decode(MsgCode, MsgData) ->
+    profiler:perf_profile({start, 2, ?FNNAME()}),
+    Ret =
     case get(pb_use_native_encoding) of
         true ->
             decode_raw(MsgCode, MsgData);
         _ ->
             decode_pb(MsgCode, MsgData)
-    end.
+    end,
+    profiler:perf_profile({stop, 2}),
+    Ret.
 
 decode_pb(MsgCode, <<>>) ->
     msg_type(MsgCode);
